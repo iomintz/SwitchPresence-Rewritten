@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using static SwitchPresence_Rewritten.MainForm;
+using static SwitchPresence_Rewritten.Program;
 
 namespace SwitchPresence_Rewritten
 {

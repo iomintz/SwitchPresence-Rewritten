@@ -3,7 +3,7 @@
     public class Config
     {
         public string IP, Client, BigKey, BigText, SmallKey, State;
-        public bool DisplayTimer, AllowTray;
+        public bool DisplayTimer;
 
         public Config() { }
     }
