@@ -50,18 +50,12 @@ namespace SwitchPresence_Rewritten
 
         private void Connect()
         {
-            if (string.IsNullOrWhiteSpace(cfg.Client))
-            {
-                Console.Error.WriteLine("Client ID cannot be empty");
-                Environment.Exit(1);
-            }
-
-            if (!IPAddress.TryParse(cfg.IP, out ipAddress))
+            if (!IPAddress.TryParse(cfg.IPOrMacAddress, out ipAddress))
             {
                 try
                 {
-                    macAddress = PhysicalAddress.Parse(cfg.IP.ToUpper());
-                    IPAddress.TryParse(Utils.GetIpByMac(cfg.IP), out ipAddress);
+                    macAddress = PhysicalAddress.Parse(cfg.IPOrMacAddress.ToUpper());
+                    IPAddress.TryParse(Utils.GetIpByMac(cfg.IPOrMacAddress), out ipAddress);
                 }
                 catch (FormatException)
                 {
@@ -108,7 +102,7 @@ namespace SwitchPresence_Rewritten
                 rpc.Dispose();
             }
 
-            rpc = new DiscordRpcClient(cfg.Client);
+            rpc = new DiscordRpcClient(cfg.ClientID.ToString());
             rpc.Initialize();
 
             timer = new Timer()
@@ -180,30 +174,30 @@ namespace SwitchPresence_Rewritten
                         {
                             Assets ass = new Assets
                             {
-                                SmallImageKey = cfg.SmallKey,
+                                SmallImageKey = cfg.SmallImageKey,
                                 SmallImageText = "Switch-Presence Rewritten"
                             };
                             RichPresence presence = new RichPresence
                             {
-                                State = cfg.State
+                                State = cfg.StateText
                             };
 
                             if (title.Name == "NULL")
                             {
                                 ass.LargeImageText = "Home Menu";
-                                ass.LargeImageText = !string.IsNullOrWhiteSpace(cfg.BigText) ? cfg.BigText : "Home Menu";
-                                ass.LargeImageKey = !string.IsNullOrWhiteSpace(cfg.BigKey) ? cfg.BigKey : string.Format("0{0:x}", 0x0100000000001000);
+                                ass.LargeImageText = !string.IsNullOrWhiteSpace(cfg.LargeImageText) ? cfg.LargeImageText : "Home Menu";
+                                ass.LargeImageKey = !string.IsNullOrWhiteSpace(cfg.LargeImageKey) ? cfg.LargeImageKey : string.Format("0{0:x}", 0x0100000000001000);
                                 presence.Details = "In the home menu";
                             }
                             else
                             {
-                                ass.LargeImageText = !string.IsNullOrWhiteSpace(cfg.BigText) ? cfg.BigText : title.Name;
-                                ass.LargeImageKey = !string.IsNullOrWhiteSpace(cfg.BigKey) ? cfg.BigKey : string.Format("0{0:x}", title.Tid);
+                                ass.LargeImageText = !string.IsNullOrWhiteSpace(cfg.LargeImageText) ? cfg.LargeImageText : title.Name;
+                                ass.LargeImageKey = !string.IsNullOrWhiteSpace(cfg.LargeImageKey) ? cfg.LargeImageKey : string.Format("0{0:x}", title.Tid);
                                 presence.Details = $"Playing {title.Name}";
                             }
 
                             presence.Assets = ass;
-                            if (cfg.DisplayTimer) presence.Timestamps = time;
+                            if (cfg.ShowTimeElapsed) presence.Timestamps = time;
                             rpc.SetPresence(presence);
 
                             ManualUpdate = false;

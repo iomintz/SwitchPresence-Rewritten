@@ -2,8 +2,9 @@
 {
     public class Config
     {
-        public string IP, Client, BigKey, BigText, SmallKey, State;
-        public bool DisplayTimer;
+        public string IPOrMacAddress, LargeImageKey, LargeImageText, SmallImageKey, StateText;
+        public long ClientID;
+        public bool ShowTimeElapsed;
 
         public Config() { }
     }
